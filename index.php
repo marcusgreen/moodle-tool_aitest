@@ -37,12 +37,14 @@ $action = new \core_ai\aiactions\generate_text(
 $manager = new \core_ai\manager();
 $result = $manager->process_action($action);
 $PAGE->set_heading($SITE->fullname);
-// $message = '';
-// if ($error = $result->get_errormessage()) {
-//     $message = $error;
-// } else {
-//     $message = $result->get_response_data()['generatedcontent'];
-// }
 echo $OUTPUT->header();
 var_dump($result);
+$message = '';
+ if ($error = $result->get_errormessage()) {
+     $message = $error;
+ } else {
+     $message = $result->get_response_data()['generatedcontent'];
+ }
+echo '</br></br>';
+echo $message;
 echo $OUTPUT->footer();
