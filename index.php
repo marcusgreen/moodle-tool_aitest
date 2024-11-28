@@ -46,5 +46,9 @@ $message = '';
      $message = $result->get_response_data()['generatedcontent'];
  }
 echo '</br></br>';
+$pluginmanager = core_plugin_manager::instance();
+$aitestinfo = $pluginmanager->get_plugin_info('tool_aitest');
+echo 'This is version '.$aitestinfo->versiondisk. ' of the tool_aitest plugin';
+echo '<br/></br>';
 echo $message;
 echo $OUTPUT->footer();
