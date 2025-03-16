@@ -24,7 +24,7 @@
 require('../../../config.php');
 
 require_admin();
-
+use curl;
 $url = new moodle_url('/admin/tool/aitest/index.php', []);
 $PAGE->set_url($url);
 $PAGE->set_context(context_system::instance());
@@ -34,7 +34,16 @@ $action = new \core_ai\aiactions\generate_text(
     userid: $USER->id,
     prompttext: 'Please respond to confirm I been successfull in connecting to you and return nothing else'
 );
-$manager = new \core_ai\manager();
+xdebug_break();
+global $DB, $CFG;
+$blockedhosts = $CFG->curlsecurityblockedhosts;
+$allowedports = $CFG->curlsecurityallowedport;
+require_once($CFG->libdir. "/filelib.php");
+
+$curl = new curl();
+$helper = new \core\files\curl_security_helper();
+
+$manager = new \core_ai\manager($DB);
 $result = $manager->process_action($action);
 $PAGE->set_heading($SITE->fullname);
 echo $OUTPUT->header();
