@@ -15,17 +15,15 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information for aitest
+ * Strings for component 'tool_aitest', language 'aitestr'
  *
  * @package    tool_aitest
- * @copyright  2024 Marcus Green
+ * @category   string
+ * @copyright  2025 2024 Marcus Green
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
-
-$plugin->component    = 'tool_aitest';
-$plugin->release      = '0.1';
-$plugin->version      = 2024112203;
-$plugin->requires     = 2024100700.04;
-$plugin->maturity     = MATURITY_BETA;
+$string['pluginname'] = 'AI Test';
+$string['testaiservices'] = 'Test AI Services';
+$string['testaiconfiguration'] = 'Send a request to the AI System to check if it is working {$a}';

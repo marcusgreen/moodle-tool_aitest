@@ -24,18 +24,30 @@
 require('../../../config.php');
 
 require_admin();
-
+use curl;
 $url = new moodle_url('/admin/tool/aitest/index.php', []);
 $PAGE->set_url($url);
 $PAGE->set_context(context_system::instance());
 $context = context_system::instance();
+$prompttext = 'Please respond to confirm I been successfull in connecting to you and return nothing else';
 $action = new \core_ai\aiactions\generate_text(
     contextid: $context->id,
     userid: $USER->id,
-    prompttext: 'Please respond to confirm I been successfull in connecting to you and return nothing else'
+    prompttext: $prompttext
 );
-$manager = new \core_ai\manager();
-$azureactions = $manager->get_supported_actions('aiprovider_azureai');
+global $DB, $CFG;
+$blockedhosts = $CFG->curlsecurityblockedhosts;
+$allowedports = $CFG->curlsecurityallowedport;
+require_once($CFG->libdir. "/filelib.php");
+$curl = new curl();
+$helper = new \core\files\curl_security_helper();
+xdebug_break();
+if(str_starts_with($CFG->release, '5')) {
+    $manager = new \core_ai\manager($DB);
+} else {
+    $manager = new \core_ai\manager();
+}
+
 $result = $manager->process_action($action);
 $PAGE->set_heading($SITE->fullname);
 echo $OUTPUT->header();
@@ -49,7 +61,8 @@ $message = '';
 echo '</br></br>';
 $pluginmanager = core_plugin_manager::instance();
 $aitestinfo = $pluginmanager->get_plugin_info('tool_aitest');
+echo 'Action generate_text was created with the prompt "'.PHP_EOL.$prompttext. '"<br/>';
 echo 'This is version '.$aitestinfo->versiondisk. ' of the tool_aitest plugin';
-echo '<br/></br>';
+echo '<br/></br>Message returned</br>';
 echo $message;
 echo $OUTPUT->footer();

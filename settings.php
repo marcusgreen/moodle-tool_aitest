@@ -15,17 +15,24 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information for aitest
+ * TODO describe file settings
  *
  * @package    tool_aitest
- * @copyright  2024 Marcus Green
+ * @copyright  2025 2024 Marcus Green
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component    = 'tool_aitest';
-$plugin->release      = '0.1';
-$plugin->version      = 2024112203;
-$plugin->requires     = 2024100700.04;
-$plugin->maturity     = MATURITY_BETA;
+
+if ($hassiteconfig) {
+    $settings = new admin_settingpage('tool_aitest', get_string('pluginname', 'tool_aitest'));
+
+    $url = new \moodle_url('../admin/tool/aitest/index.php');
+    $link = \html_writer::link($url, get_string('testaiservices', 'tool_aitest'));
+    $settings->add(new admin_setting_heading('testaiconfiguration', '',
+    new \lang_string('testaiconfiguration', 'tool_aitest', $link)));
+    $ADMIN->add('tools', $settings);
+
+}
