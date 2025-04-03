@@ -35,6 +35,7 @@ $action = new \core_ai\aiactions\generate_text(
     prompttext: 'Please respond to confirm I been successfull in connecting to you and return nothing else'
 );
 $manager = new \core_ai\manager();
+$azureactions = $manager->get_supported_actions('aiprovider_azureai');
 $result = $manager->process_action($action);
 $PAGE->set_heading($SITE->fullname);
 echo $OUTPUT->header();
