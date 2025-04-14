@@ -41,7 +41,6 @@ $allowedports = $CFG->curlsecurityallowedport;
 require_once($CFG->libdir. "/filelib.php");
 $curl = new curl();
 $helper = new \core\files\curl_security_helper();
-xdebug_break();
 if(str_starts_with($CFG->release, '5')) {
     $manager = new \core_ai\manager($DB);
 } else {
