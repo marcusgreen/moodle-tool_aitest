@@ -25,6 +25,7 @@ require('../../../config.php');
 
 require_admin();
 use curl;
+$actionparam = optional_param('action', '', PARAM_ALPHA);
 $url = new moodle_url('/admin/tool/aitest/index.php', []);
 $PAGE->set_url($url);
 $PAGE->set_context(context_system::instance());
@@ -36,32 +37,39 @@ $action = new \core_ai\aiactions\generate_text(
     prompttext: $prompttext
 );
 global $DB, $CFG;
-$blockedhosts = $CFG->curlsecurityblockedhosts;
-$allowedports = $CFG->curlsecurityallowedport;
 require_once($CFG->libdir. "/filelib.php");
-$curl = new curl();
-$helper = new \core\files\curl_security_helper();
-if(str_starts_with($CFG->release, '5')) {
-    $manager = new \core_ai\manager($DB);
-} else {
-    $manager = new \core_ai\manager();
-}
 
-$result = $manager->process_action($action);
 $PAGE->set_heading($SITE->fullname);
 echo $OUTPUT->header();
-var_dump($result);
-$message = '';
- if ($error = $result->get_errormessage()) {
-     $message = $error;
- } else {
-     $message = $result->get_response_data()['generatedcontent'];
- }
-echo '</br></br>';
-$pluginmanager = core_plugin_manager::instance();
-$aitestinfo = $pluginmanager->get_plugin_info('tool_aitest');
-echo 'Action generate_text was created with the prompt "'.PHP_EOL.$prompttext. '"<br/>';
-echo 'This is version '.$aitestinfo->versiondisk. ' of the tool_aitest plugin';
-echo '<br/></br>Message returned</br>';
-echo $message;
+echo '<a href="index.php?action=test" class="btn btn-primary mb-3">'.get_string('sendtestprompt', 'tool_aitest').'</a>';
+echo ' ';
+echo '<a href="'.$CFG->wwwroot.'/admin/settings.php?section=aiprovider" class="btn btn-secondary mb-3">AI providers</a>';
+echo ' ';
+echo '<a href="diagnose.php" class="btn btn-info mb-3">Diagnostics</a>';
+echo '<br/><br/>';
+$message  = "";
+if ($actionparam === 'test') {
+    echo '<div class="alert alert-info">Test prompt submitted successfully!</div>';
+    $blockedhosts = $CFG->curlsecurityblockedhosts;
+    $allowedports = $CFG->curlsecurityallowedport;
+
+    $curl = new curl();
+    $helper = new \core\files\curl_security_helper();
+    if (str_starts_with($CFG->release, '5')) {
+        $manager = new \core_ai\manager($DB);
+    } else {
+        $manager = new \core_ai\manager();
+    }
+    $result = $manager->process_action($action);
+    var_dump($result);
+    if ($error = $result->get_errormessage()) {
+        $message = $error;
+    } else {
+        $message = $result->get_response_data()['generatedcontent'];
+    }
+    echo '</br></br>';
+    echo '<br/></br>Message returned</br>';
+    echo $message;
+}
+echo '<br/><br/>';
 echo $OUTPUT->footer();

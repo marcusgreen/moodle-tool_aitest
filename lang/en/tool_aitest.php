@@ -37,3 +37,4 @@ $string['noactiveplacements'] = 'No active AI placements configured.';
 $string['enabled'] = 'enabled';
 $string['disabled'] = 'disabled';
 $string['download_diagnostics'] = 'Download Diagnostics';
+$string['sendtestprompt'] = 'Send test prompt';

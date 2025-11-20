@@ -102,6 +102,7 @@ if (isset($_GET['download']) && $_GET['download'] == 1) {
     ];
 
     echo $output->header();
+    echo '<a href="index.php" class="btn btn-secondary mb-3">Back to Index</a><br/><br/>';
     echo $output->render_from_template('tool_aitest/diagnose', $templatedata);
     echo $output->footer();
     exit;
