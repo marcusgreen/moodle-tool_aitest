@@ -26,6 +26,6 @@ defined('MOODLE_INTERNAL') || die();
 
 $plugin->component    = 'tool_aitest';
 $plugin->release      = '0.1';
-$plugin->version      = 2024112208;
+$plugin->version      = 2024112209;
 $plugin->requires     = 2024100700.04;
 $plugin->maturity     = MATURITY_BETA;
