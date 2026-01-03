@@ -33,6 +33,6 @@ if ($hassiteconfig) {
     $link = \html_writer::link($url, get_string('testaiservices', 'tool_aitest'));
     $settings->add(new admin_setting_heading('testaiconfiguration', '',
     new \lang_string('testaiconfiguration', 'tool_aitest', $link)));
-    $ADMIN->add('tools', $settings);
+    $ADMIN->add('ai', $settings);
 
 }
