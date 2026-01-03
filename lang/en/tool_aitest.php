@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'tool_aitest', language 'aitestr'
+ * Strings for component 'tool_aitest', language 'en'
  *
  * @package    tool_aitest
  * @category   string
@@ -25,6 +25,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 $string['pluginname'] = 'AI Test';
+$string['general'] = 'General';
+$string['custom'] = 'Custom';
 $string['testaiservices'] = 'Test AI Services';
 $string['testaiconfiguration'] = 'Send a request to the AI System to check if it is working {$a}';
 $string['diagnosticsreport'] = 'Diagnostics report';
