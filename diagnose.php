@@ -27,6 +27,7 @@ require_admin();
 require_once($CFG->libdir . '/adminlib.php');
 require_once($CFG->dirroot . '/lib/outputlib.php');
 require_once($CFG->libdir . '/weblib.php'); // For format_text
+require_once(__DIR__ . '/lib.php');
 
 // The AI manager class needs to be properly loaded
 require_once($CFG->dirroot . '/ai/classes/manager.php');
@@ -41,45 +42,17 @@ $diagnostics = "# " . get_string('diagnosticsreport', 'tool_aitest') . "\n\n";
 $diagnostics .= "## " . get_string('moodleversion', 'tool_aitest') . "\n";
 $diagnostics .= get_string('moodleversioninfo', 'tool_aitest', ['version' => $CFG->version, 'release' => $CFG->release]) . "\n\n";
 
-  // Get active providers.
-    $diagnostics .= "## " . get_string('activeproviders', 'tool_aitest') . "\n";
-    $providers = $aimanager->get_provider_instances();
-if (empty($providers)) {
-    $diagnostics .= get_string('noactiveproviders', 'tool_aitest') . "\n\n";
-} else {
-    foreach ($providers as $provider) {
-        $status = $provider->enabled ? get_string('enabled', 'tool_aitest') : get_string('disabled', 'tool_aitest');
-        $diagnostics .= "- {$provider->name} ({$provider->provider}) - {$status}\n";
-    }
-    $diagnostics .= "\n";
-}
+// Get active providers.
+$diagnostics .= tool_aitest_get_active_providers_diagnostics($aimanager);
 
-  // Get active placements.
-    $diagnostics .= "## " . get_string('activeplacements', 'tool_aitest') . "\n";
-    // Use the plugin manager to get all aiplacement plugins
-    $pluginmanager = core\plugin_manager::instance();
-    $placements = $pluginmanager->get_plugins_of_type('aiplacement');
-    $activeplacements = [];
-foreach ($placements as $component => $plugin) {
-    if ($plugin->is_installed_and_upgraded()) {
-        $activeplacements[$component] = $plugin;
-    }
-}
-if (empty($activeplacements)) {
-    $diagnostics .= get_string('noactiveplacements', 'tool_aitest') . "\n\n";
-} else {
-    foreach ($activeplacements as $component => $placement) {
-        $status = $placement->is_enabled() ? get_string('enabled', 'tool_aitest') : get_string('disabled', 'tool_aitest');
-        $diagnostics .= "- {$component} - {$status}\n";
-    }
-    $diagnostics .= "\n";
-}
+// Get active placements.
+$diagnostics .= tool_aitest_get_active_placements_diagnostics();
 
 // Set headers for file download.
 $filename = 'tool_aitest_diagnostics_' . date('Y-m-d_H-i-s') . '.md';
 
-if (isset($_GET['download']) && $_GET['download'] == 1) {
-// Set headers for file download and output diagnostics.
+if (optional_param('download', 0, PARAM_BOOL)) {
+    // Set headers for file download and output diagnostics.
     header('Content-Type: text/markdown');
     header('Content-Disposition: attachment; filename="' . $filename . '"');
     header('Content-Length: ' . strlen($diagnostics));

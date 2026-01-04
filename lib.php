@@ -68,3 +68,54 @@ function tool_aitest_reportbuilder_data_sources(): array {
         'ai_action_generate_text' => \tool_aitest\reportbuilder\datasource\ai_action_generate_text::class
     ];
 }
+
+/**
+ * Get the active providers diagnostics.
+ *
+ * @param \core_ai\manager $aimanager The AI manager.
+ * @return string The diagnostics string.
+ */
+function tool_aitest_get_active_providers_diagnostics(\core_ai\manager $aimanager): string {
+    $url = new moodle_url('/admin/settings.php', ['section' => 'aiprovider']);
+    $diagnostics = "## [" . get_string('activeproviders', 'tool_aitest') . "](" . $url->out(false) . ")\n";
+    $providers = $aimanager->get_provider_instances();
+    if (empty($providers)) {
+        $diagnostics .= get_string('noactiveproviders', 'tool_aitest') . "\n\n";
+    } else {
+        foreach ($providers as $provider) {
+            $status = $provider->enabled ? get_string('enabled', 'tool_aitest') : get_string('disabled', 'tool_aitest');
+            $diagnostics .= "- {$provider->name} ({$provider->provider}) - {$status}\n";
+        }
+        $diagnostics .= "\n";
+    }
+    return $diagnostics;
+}
+
+/**
+ * Get the active placements diagnostics.
+ *
+ * @return string The diagnostics string.
+ */
+function tool_aitest_get_active_placements_diagnostics(): string {
+    $url = new moodle_url('/admin/settings.php', ['section' => 'aiplacement']);
+    $diagnostics = "## [" . get_string('activeplacements', 'tool_aitest') . "](" . $url->out(false) . ")\n";
+    // Use the plugin manager to get all aiplacement plugins.
+    $pluginmanager = core\plugin_manager::instance();
+    $placements = $pluginmanager->get_plugins_of_type('aiplacement');
+    $activeplacements = [];
+    foreach ($placements as $component => $plugin) {
+        if ($plugin->is_installed_and_upgraded()) {
+            $activeplacements[$component] = $plugin;
+        }
+    }
+    if (empty($activeplacements)) {
+        $diagnostics .= get_string('noactiveplacements', 'tool_aitest') . "\n\n";
+    } else {
+        foreach ($activeplacements as $component => $placement) {
+            $status = $placement->is_enabled() ? get_string('enabled', 'tool_aitest') : get_string('disabled', 'tool_aitest');
+            $diagnostics .= "- {$component} - {$status}\n";
+        }
+        $diagnostics .= "\n";
+    }
+    return $diagnostics;
+}
