@@ -1,0 +1,30 @@
+<div class="container">
+    <h2>{{#str}}localaimanagerheading,tool_aitest{{/str}}</h2>
+    <a href="index.php" class="btn btn-secondary mb-3">{{#str}}backtochoice,tool_aitest{{/str}}</a>
+    <br/><br/>
+    <a href="localaimanager.php?action=test" class="btn btn-primary mb-3">{{#str}}sendtestprompt,tool_aitest{{/str}}</a>
+    <br/><br/>
+    
+    {{#testsubmitted}}
+        <div class="alert alert-info">{{#str}}testpromptsubmitted,tool_aitest{{/str}}</div>
+        
+        {{#success}}
+            <div class="alert alert-success">{{#str}}connectionsuccessful,tool_aitest{{/str}}</div>
+            <h4>{{#str}}response,tool_aitest{{/str}}</h4>
+            <pre>{{{response}}}</pre>
+        {{/success}}
+        
+        {{#error}}
+            <div class="alert alert-danger">{{#str}}error,tool_aitest{{/str}} {{{error}}}</div>
+            {{#debuginfo}}
+                <h4>{{#str}}debuginfo,tool_aitest{{/str}}</h4>
+                <pre>{{{debuginfo}}}</pre>
+            {{/debuginfo}}
+        {{/error}}
+        
+        {{#exception}}
+            <div class="alert alert-danger">{{#str}}exception,tool_aitest{{/str}} {{{exceptionmessage}}}</div>
+            <pre>{{{exceptiontrace}}}</pre>
+        {{/exception}}
+    {{/testsubmitted}}
+</div>

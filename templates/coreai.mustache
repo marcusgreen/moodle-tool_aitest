@@ -1,0 +1,19 @@
+<div class="container">
+    <h2>{{#str}}coreaiheading,tool_aitest{{/str}}</h2>
+    <a href="index.php" class="btn btn-secondary mb-3">{{#str}}backtochoice,tool_aitest{{/str}}</a>
+    <br/><br/>
+    <a href="coreai.php?action=test" class="btn btn-primary mb-3">{{#str}}sendtestprompt,tool_aitest{{/str}}</a>
+    <a href="{{wwwroot}}/admin/settings.php?section=aiprovider" class="btn btn-secondary mb-3">{{#str}}aiproviders,tool_aitest{{/str}}</a>
+    <a href="diagnose.php" class="btn btn-info mb-3">{{#str}}diagnostics,tool_aitest{{/str}}</a>
+    <br/><br/>
+    {{#testsubmitted}}
+        <div class="alert alert-info">{{#str}}testpromptsubmitted,tool_aitest{{/str}}</div>
+        <br/><br/>
+        <br/><br/>
+        <p>{{#str}}messagereturned,tool_aitest{{/str}}</p>
+        <pre>{{result}}</pre>
+        {{#message}}
+            {{message}}
+        {{/message}}
+    {{/testsubmitted}}
+</div>
