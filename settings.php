@@ -35,4 +35,8 @@ if ($hassiteconfig) {
     new \lang_string('testaiconfiguration', 'tool_aitest', $link)));
     $ADMIN->add('ai', $settings);
 
+    // Add link to tools section.
+    $ADMIN->add('tools', new admin_externalpage('toolaitest', get_string('pluginname', 'tool_aitest'),
+        new moodle_url('/admin/tool/aitest/index.php'), 'moodle/site:config'));
+
 }
