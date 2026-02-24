@@ -24,7 +24,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require('../../../config.php');
+require('../../../../config.php');
+
 
 require_login();
 
@@ -39,8 +40,7 @@ $PAGE->navbar->add(get_string('report:aiactiongeneratetext', 'tool_aitest'), $PA
 require_capability('moodle/site:config', context_system::instance());
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading(get_string('report:aiactiongeneratetext', 'tool_aitest'));
-
+echo '<a href="../localaimanager.php" class="btn btn-secondary mb-3">Back to Local AI Manager</a>';
 // Create and output the report
 $report = \core_reportbuilder\system_report_factory::create(
     \tool_aitest\reportbuilder\local\systemreports\ai_action_generate_text_report::class,
