@@ -55,6 +55,12 @@ function tool_aitest_extend_settings_navigation(settings_navigation $settingsnav
             new moodle_url('/admin/tool/aitest/report/ai_action_generate_text.php'),
             'moodle/site:config'
         ));
+    $settingsnav->add(new admin_externalpage(
+            'tool_aitest_ai_manager_request_log',
+            get_string('report:aimanagerrequestlog', 'tool_aitest'),
+            new moodle_url('/admin/tool/aitest/report/ai_manager_request_log.php'),
+            'moodle/site:config'
+        ));
     }
 }
 
@@ -65,7 +71,8 @@ function tool_aitest_extend_settings_navigation(settings_navigation $settingsnav
  */
 function tool_aitest_reportbuilder_data_sources(): array {
     return [
-        'ai_action_generate_text' => \tool_aitest\reportbuilder\datasource\ai_action_generate_text::class
+        'ai_action_generate_text' => \tool_aitest\reportbuilder\datasource\ai_action_generate_text::class,
+        'ai_manager_request_log' => \tool_aitest\reportbuilder\datasource\ai_manager_request_log::class,
     ];
 }
 
