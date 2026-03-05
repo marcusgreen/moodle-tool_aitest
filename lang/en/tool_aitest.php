@@ -62,6 +62,7 @@ $string['generatedcontent'] = 'Generated Content';
 $string['finishreason'] = 'Finish Reason';
 $string['prompttokens'] = 'Prompt Tokens';
 $string['completiontoken'] = 'Completion Tokens';
+$string['totalttokens'] = 'Total Tokens';
 $string['entity:aimanagerrequestlog'] = 'AI Manager Request Log';
 $string['datasource:aimanagerrequestlog'] = 'AI Manager Request Log';
 $string['report:aimanagerrequestlog'] = 'AI Manager Request Log Report';
