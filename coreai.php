@@ -99,7 +99,7 @@ if ($actionparam === 'test') {
             $result = $manager->process_action($action);
         } catch (\Throwable $e) {
             $result = null;
-            $configurl = (new moodle_url('/ai/configure_providers.php'))->out(false);
+            $configurl = (new moodle_url('/admin/settings.php', ['section' => 'aiprovider']))->out(false);
             if (str_contains($e->getMessage(), 'get_system_instruction')) {
                 // The provider action has no system instruction configured, which some
                 // providers (e.g. Ollama) require. Give a clear pointer instead of a raw TypeError.
