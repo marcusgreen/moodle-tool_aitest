@@ -9,11 +9,18 @@
     {{#testsubmitted}}
         <div class="alert alert-info">{{#str}}testpromptsubmitted,tool_aitest{{/str}}</div>
         <br/><br/>
+        <p><strong>{{#str}}prompttext,tool_aitest{{/str}}</strong></p>
+        <pre>{{prompttext}}</pre>
+        {{#success}}
+            <div class="alert alert-success">{{#str}}responsereceived,tool_aitest{{/str}}</div>
+            <p><strong>{{#str}}responsetext,tool_aitest{{/str}}</strong></p>
+            <pre>{{responsetext}}</pre>
+        {{/success}}
+        {{#message}}
+            <div class="alert alert-danger">{{message}}</div>
+        {{/message}}
         <br/><br/>
         <p>{{#str}}messagereturned,tool_aitest{{/str}}</p>
         <pre>{{result}}</pre>
-        {{#message}}
-            {{message}}
-        {{/message}}
     {{/testsubmitted}}
 </div>

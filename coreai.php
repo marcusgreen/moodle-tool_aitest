@@ -25,8 +25,6 @@ require ('../../../config.php');
 
 require_admin();
 
-use curl;
-
 $actionparam = optional_param('action', '', PARAM_ALPHA);
 $url = new moodle_url('/admin/tool/aitest/coreai.php', []);
 $PAGE->set_url($url);
@@ -48,7 +46,10 @@ $templatedata = [
     'wwwroot' => $CFG->wwwroot,
     'testsubmitted' => false,
     'result' => '',
-    'message' => ''
+    'message' => '',
+    'success' => false,
+    'responsetext' => '',
+    'prompttext' => $prompttext
 ];
 
 if ($actionparam === 'test') {
@@ -56,23 +57,55 @@ if ($actionparam === 'test') {
     $blockedhosts = $CFG->curlsecurityblockedhosts;
     $allowedports = $CFG->curlsecurityallowedport;
 
-    $curl = new curl();
     $helper = new \core\files\curl_security_helper();
+
+    // Pre-check: detect whether Moodle's own cURL security helper would block any
+    // enabled AI provider endpoint (e.g. a non-allowed port or blocked host). A block
+    // makes the underlying request fail with code 0, which core cannot map to an AI
+    // error and instead throws "Invalid error code: 0". Catch that here with a clear
+    // message before it happens.
+    $blockedendpoints = [];
+    if ($helper->is_enabled()) {
+        $providers = $DB->get_records('ai_providers', ['enabled' => 1]);
+        foreach ($providers as $provider) {
+            $config = json_decode($provider->config);
+            if (empty($config->endpoint)) {
+                continue;
+            }
+            if ($helper->url_is_blocked($config->endpoint)) {
+                $blockedendpoints[] = $provider->name . ' (' . $config->endpoint . ')';
+            }
+        }
+    }
+
     if (str_starts_with($CFG->release, '5')) {
         $manager = new \core_ai\manager($DB);
     } else {
         $manager = new \core_ai\manager();
     }
-    $result = $manager->process_action($action);
 
-    ob_start();
-    var_dump($result);
-    $templatedata['result'] = ob_get_clean();
-
-    if ($error = $result->get_errormessage()) {
-        $templatedata['message'] = $error;
+    if ($blockedendpoints) {
+        $result = null;
+        $templatedata['message'] = get_string(
+            'endpointblocked',
+            'tool_aitest',
+            implode(', ', $blockedendpoints)
+        );
     } else {
-        $templatedata['message'] = $result->get_response_data()['generatedcontent'];
+        $result = $manager->process_action($action);
+    }
+
+    if ($result !== null) {
+        ob_start();
+        var_dump($result);
+        $templatedata['result'] = ob_get_clean();
+
+        if ($result->get_success()) {
+            $templatedata['success'] = true;
+            $templatedata['responsetext'] = $result->get_response_data()['generatedcontent'];
+        } else {
+            $templatedata['message'] = $result->get_errormessage();
+        }
     }
 }
 
