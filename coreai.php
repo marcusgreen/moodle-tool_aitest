@@ -89,7 +89,10 @@ if ($actionparam === 'test') {
         $templatedata['message'] = get_string(
             'endpointblocked',
             'tool_aitest',
-            implode(', ', $blockedendpoints)
+            (object) [
+                'endpoints' => implode(', ', $blockedendpoints),
+                'url' => (new moodle_url('/admin/settings.php', ['section' => 'httpsecurity']))->out(false),
+            ]
         );
     } else {
         $result = $manager->process_action($action);

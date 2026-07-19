@@ -46,7 +46,7 @@ $string['aiproviders'] = 'AI providers';
 $string['diagnostics'] = 'Diagnostics';
 $string['testpromptsubmitted'] = 'Test prompt submitted successfully!';
 $string['messagereturned'] = 'Message returned';
-$string['endpointblocked'] = 'Moodle cURL security is blocking the AI provider endpoint(s): {$a}. Check the allowed ports (curlsecurityallowedport) and blocked hosts (curlsecurityblockedhosts) under Site admin > Server > HTTP security.';
+$string['endpointblocked'] = 'Moodle cURL security is blocking the AI provider endpoint(s): {$a->endpoints}. Check the allowed ports (curlsecurityallowedport) and blocked hosts (curlsecurityblockedhosts) under <a href="{$a->url}">Site admin &gt; Server &gt; HTTP security</a>.';
 $string['prompttext'] = 'Prompt sent';
 $string['responsereceived'] = 'Response received successfully';
 $string['responsetext'] = 'Response text';
