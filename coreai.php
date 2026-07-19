@@ -95,7 +95,23 @@ if ($actionparam === 'test') {
             ]
         );
     } else {
-        $result = $manager->process_action($action);
+        try {
+            $result = $manager->process_action($action);
+        } catch (\Throwable $e) {
+            $result = null;
+            $configurl = (new moodle_url('/ai/configure_providers.php'))->out(false);
+            if (str_contains($e->getMessage(), 'get_system_instruction')) {
+                // The provider action has no system instruction configured, which some
+                // providers (e.g. Ollama) require. Give a clear pointer instead of a raw TypeError.
+                $templatedata['message'] = get_string('systeminstructionmissing', 'tool_aitest', $configurl);
+            } else {
+                $templatedata['message'] = get_string(
+                    'actionexception',
+                    'tool_aitest',
+                    (object) ['message' => s($e->getMessage()), 'url' => $configurl]
+                );
+            }
+        }
     }
 
     if ($result !== null) {

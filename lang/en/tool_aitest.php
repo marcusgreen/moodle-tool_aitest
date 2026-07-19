@@ -47,6 +47,8 @@ $string['diagnostics'] = 'Diagnostics';
 $string['testpromptsubmitted'] = 'Test prompt submitted successfully!';
 $string['messagereturned'] = 'Message returned';
 $string['endpointblocked'] = 'Moodle cURL security is blocking the AI provider endpoint(s): {$a->endpoints}. Check the allowed ports (curlsecurityallowedport) and blocked hosts (curlsecurityblockedhosts) under <a href="{$a->url}">Site admin &gt; Server &gt; HTTP security</a>.';
+$string['systeminstructionmissing'] = 'The AI provider rejected the request because no system instruction is configured for the text-generation action. Some providers (such as Ollama) require one. Set a <strong>System instruction</strong> value for the Generate text action under <a href="{$a}">Site admin &gt; AI &gt; AI providers</a>, then run the test again.';
+$string['actionexception'] = 'The AI request failed: {$a->message}. Review the provider configuration under <a href="{$a->url}">Site admin &gt; AI &gt; AI providers</a>.';
 $string['prompttext'] = 'Prompt sent';
 $string['responsereceived'] = 'Response received successfully';
 $string['responsetext'] = 'Response text';
