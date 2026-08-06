@@ -25,6 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 $string['pluginname'] = 'AI Test';
+$string['runtest'] = 'Run AI test';
 $string['general'] = 'General';
 $string['custom'] = 'Custom';
 $string['testaiservices'] = 'Test AI Services';

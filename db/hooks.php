@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information for aitest
+ * Hook callbacks for tool_aitest.
  *
  * @package    tool_aitest
  * @copyright  2024 Marcus Green
@@ -24,8 +24,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component    = 'tool_aitest';
-$plugin->release      = '0.1';
-$plugin->version      = 2024112210;
-$plugin->requires     = 2024100700.04;
-$plugin->maturity     = MATURITY_BETA;
+$callbacks = [
+    [
+        'hook' => \core\hook\output\before_footer_html_generation::class,
+        'callback' => \tool_aitest\hook_callbacks::class . '::add_provider_test_link',
+    ],
+];
