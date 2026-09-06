@@ -1,0 +1,37 @@
+{
+    "formatversion": 1,
+    "presets": [
+        {
+            "id": "openaigpt4o",
+            "name": "OpenAI GPT-4o",
+            "description": "OpenAI's hosted API using the chat completions endpoint.",
+            "docsurl": "https://platform.openai.com/docs/api-reference/chat",
+            "provider": "aiprovider_openai",
+            "enabled": true,
+            "config": {
+                "apikey": null,
+                "orgid": ""
+            },
+            "fields": {
+                "apikey": {
+                    "placeholder": "sk-proj-...",
+                    "help": "Create one under API keys in the OpenAI platform dashboard."
+                },
+                "orgid": {
+                    "placeholder": "org-...",
+                    "help": "Only needed if your OpenAI account belongs to more than one organisation."
+                }
+            },
+            "actions": {
+                "core_ai\\aiactions\\generate_text": {
+                    "enabled": true,
+                    "settings": {
+                        "model": "gpt-4o",
+                        "endpoint": "https://api.openai.com/v1/chat/completions",
+                        "systeminstruction": "You are a helpful assistant embedded in a Moodle site. Answer concisely."
+                    }
+                }
+            }
+        }
+    ]
+}

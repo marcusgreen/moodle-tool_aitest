@@ -1,0 +1,44 @@
+{
+    "formatversion": 1,
+    "presets": [
+        {
+            "id": "awsbedrock",
+            "name": "AWS Bedrock",
+            "description": "Amazon Bedrock. It has no endpoint setting: the region determines where requests go, and the model id must match one your account has access to in that region.",
+            "docsurl": "https://docs.aws.amazon.com/bedrock/latest/userguide/models-supported.html",
+            "provider": "aiprovider_awsbedrock",
+            "enabled": true,
+            "requires": {
+                "moodlebranch": "502"
+            },
+            "config": {
+                "apikey": null,
+                "apisecret": null
+            },
+            "fields": {
+                "apikey": {
+                    "placeholder": "AKIA...",
+                    "help": "AWS access key id for an IAM user with bedrock:InvokeModel."
+                },
+                "apisecret": {
+                    "placeholder": "your AWS secret access key",
+                    "help": "The secret shown once when the access key was created."
+                },
+                "model": {
+                    "placeholder": "anthropic.claude-3-5-sonnet-20241022-v2:0",
+                    "help": "The Bedrock model id, which must be enabled for your account in the chosen region."
+                }
+            },
+            "actions": {
+                "core_ai\\aiactions\\generate_text": {
+                    "enabled": true,
+                    "settings": {
+                        "model": null,
+                        "awsregion": "us-east-1",
+                        "systeminstruction": "You are a helpful assistant embedded in a Moodle site. Answer concisely."
+                    }
+                }
+            }
+        }
+    ]
+}

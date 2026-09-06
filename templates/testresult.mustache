@@ -1,0 +1,35 @@
+{{!
+    @template tool_aitest/testresult
+
+    Outcome of an AI test run, shown above the core AI action settings form.
+
+    Context variables required for this template:
+    * success bool Whether the test prompt got a response.
+    * message string HTML description of the failure, if it failed.
+    * prompttext string The prompt that was sent.
+    * responsetext string The text the provider returned.
+    * detailsurl string Link to the full tool_aitest test page.
+
+    Example context (json):
+    {
+        "success": true,
+        "message": "",
+        "prompttext": "Are you there?",
+        "responsetext": "Yes.",
+        "detailsurl": "/admin/tool/aitest/coreai.php?action=test"
+    }
+}}
+<div class="tool-aitest-result">
+    {{#success}}
+        <strong>{{#str}}connectionsuccessful,tool_aitest{{/str}}</strong>
+        <p class="mt-2 mb-1"><strong>{{#str}}prompttext,tool_aitest{{/str}}</strong></p>
+        <pre class="mb-1">{{prompttext}}</pre>
+        <p class="mb-1"><strong>{{#str}}responsetext,tool_aitest{{/str}}</strong></p>
+        <pre class="mb-1">{{responsetext}}</pre>
+    {{/success}}
+    {{^success}}
+        <strong>{{#str}}testfailed,tool_aitest{{/str}}</strong>
+        <div class="mt-2 mb-1">{{{message}}}</div>
+    {{/success}}
+    <a href="{{detailsurl}}">{{#str}}fulltestpage,tool_aitest{{/str}}</a>
+</div>

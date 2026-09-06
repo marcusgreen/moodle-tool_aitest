@@ -26,19 +26,25 @@ require ('../../../config.php');
 require_admin();
 
 $actionparam = optional_param('action', '', PARAM_ALPHA);
-$url = new moodle_url('/admin/tool/aitest/coreai.php', []);
+$provider = optional_param('provider', '', PARAM_PLUGIN);
+$providerid = optional_param('providerid', 0, PARAM_INT);
+// Set when the test was launched from the core AI provider action settings form, so
+// the admin can get back to the settings they just saved.
+$returnurl = optional_param('returnurl', '', PARAM_LOCALURL);
+
+$urlparams = ['action' => $actionparam];
+if ($provider !== '') {
+    $urlparams['provider'] = $provider;
+}
+if ($providerid) {
+    $urlparams['providerid'] = $providerid;
+}
+if ($returnurl !== '') {
+    $urlparams['returnurl'] = $returnurl;
+}
+$url = new moodle_url('/admin/tool/aitest/coreai.php', $urlparams);
 $PAGE->set_url($url);
 $PAGE->set_context(context_system::instance());
-$context = context_system::instance();
-$prompttext = 'Please respond to confirm I been successfull in connecting to you and return nothing else';
-$action = new \core_ai\aiactions\generate_text(
-    contextid: $context->id,
-    userid: $USER->id,
-    prompttext: $prompttext
-);
-global $DB, $CFG;
-require_once($CFG->libdir . '/filelib.php');
-
 $PAGE->set_heading($SITE->fullname);
 $output = $PAGE->get_renderer('core');
 
@@ -49,83 +55,15 @@ $templatedata = [
     'message' => '',
     'success' => false,
     'responsetext' => '',
-    'prompttext' => $prompttext
+    'prompttext' => \tool_aitest\tester::PROMPT,
+    'returnurl' => $returnurl !== '' ? (new moodle_url($returnurl))->out(false) : '',
+    'testurl' => (new moodle_url('/admin/tool/aitest/coreai.php',
+        array_merge($urlparams, ['action' => 'test'])))->out(false),
 ];
 
 if ($actionparam === 'test') {
+    $templatedata = array_merge($templatedata, \tool_aitest\tester::run());
     $templatedata['testsubmitted'] = true;
-    $blockedhosts = $CFG->curlsecurityblockedhosts;
-    $allowedports = $CFG->curlsecurityallowedport;
-
-    $helper = new \core\files\curl_security_helper();
-
-    // Pre-check: detect whether Moodle's own cURL security helper would block any
-    // enabled AI provider endpoint (e.g. a non-allowed port or blocked host). A block
-    // makes the underlying request fail with code 0, which core cannot map to an AI
-    // error and instead throws "Invalid error code: 0". Catch that here with a clear
-    // message before it happens.
-    $blockedendpoints = [];
-    if ($helper->is_enabled()) {
-        $providers = $DB->get_records('ai_providers', ['enabled' => 1]);
-        foreach ($providers as $provider) {
-            $config = json_decode($provider->config);
-            if (empty($config->endpoint)) {
-                continue;
-            }
-            if ($helper->url_is_blocked($config->endpoint)) {
-                $blockedendpoints[] = $provider->name . ' (' . $config->endpoint . ')';
-            }
-        }
-    }
-
-    if (str_starts_with($CFG->release, '5')) {
-        $manager = new \core_ai\manager($DB);
-    } else {
-        $manager = new \core_ai\manager();
-    }
-
-    if ($blockedendpoints) {
-        $result = null;
-        $templatedata['message'] = get_string(
-            'endpointblocked',
-            'tool_aitest',
-            (object) [
-                'endpoints' => implode(', ', $blockedendpoints),
-                'url' => (new moodle_url('/admin/settings.php', ['section' => 'httpsecurity']))->out(false),
-            ]
-        );
-    } else {
-        try {
-            $result = $manager->process_action($action);
-        } catch (\Throwable $e) {
-            $result = null;
-            $configurl = (new moodle_url('/admin/settings.php', ['section' => 'aiprovider']))->out(false);
-            if (str_contains($e->getMessage(), 'get_system_instruction')) {
-                // The provider action has no system instruction configured, which some
-                // providers (e.g. Ollama) require. Give a clear pointer instead of a raw TypeError.
-                $templatedata['message'] = get_string('systeminstructionmissing', 'tool_aitest', $configurl);
-            } else {
-                $templatedata['message'] = get_string(
-                    'actionexception',
-                    'tool_aitest',
-                    (object) ['message' => s($e->getMessage()), 'url' => $configurl]
-                );
-            }
-        }
-    }
-
-    if ($result !== null) {
-        ob_start();
-        var_dump($result);
-        $templatedata['result'] = ob_get_clean();
-
-        if ($result->get_success()) {
-            $templatedata['success'] = true;
-            $templatedata['responsetext'] = $result->get_response_data()['generatedcontent'];
-        } else {
-            $templatedata['message'] = $result->get_errormessage();
-        }
-    }
 }
 
 echo $output->header();

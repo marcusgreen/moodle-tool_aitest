@@ -1,0 +1,94 @@
+{{!
+    @template tool_aitest/presets
+
+    List of ready made AI provider configurations that can be installed and tested.
+
+    Context variables required for this template:
+    * heading string Page heading.
+    * intro string Sentence explaining what a preset is.
+    * supported bool Whether this Moodle can take provider instances at all.
+    * unsupportedmessage string Shown when it cannot.
+    * hasrows bool Whether there is at least one preset.
+    * presets array Each with name, description, provider, docsurl, hasdocs,
+                    installable, reason, installurl.
+    * testurl string Link to the plain AI test page.
+    * providersurl string Link to the core AI providers page.
+
+    Example context (json):
+    {
+        "heading": "AI provider presets",
+        "intro": "Pick a preset, supply your API key, and it is created and tested.",
+        "supported": true,
+        "unsupportedmessage": "",
+        "hasrows": true,
+        "presets": [
+            {
+                "name": "OpenAI GPT-4o",
+                "description": "OpenAI hosted API, chat completions endpoint.",
+                "provider": "OpenAI API provider",
+                "docsurl": "https://platform.openai.com/docs",
+                "hasdocs": true,
+                "installable": true,
+                "reason": "",
+                "installurl": "/admin/tool/aitest/presets.php?action=install&preset=openaigpt4o"
+            }
+        ],
+        "testurl": "/admin/tool/aitest/coreai.php",
+        "providersurl": "/ai/configure.php"
+    }
+}}
+<div class="tool-aitest-presets">
+    <h2>{{heading}}</h2>
+    <p class="lead">{{intro}}</p>
+
+    {{^supported}}
+        <div class="alert alert-info">{{unsupportedmessage}}</div>
+    {{/supported}}
+
+    {{#hasrows}}
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">{{#str}}presetname, tool_aitest{{/str}}</th>
+                    <th scope="col">{{#str}}providertype, core_ai{{/str}}</th>
+                    <th scope="col">{{#str}}description{{/str}}</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#presets}}
+                <tr>
+                    <th scope="row">{{name}}</th>
+                    <td>{{provider}}</td>
+                    <td>
+                        {{description}}
+                        {{#hasdocs}}
+                            <a href="{{docsurl}}" target="_blank" rel="noreferrer noopener">
+                                {{#str}}presetdocs, tool_aitest{{/str}}
+                            </a>
+                        {{/hasdocs}}
+                    </td>
+                    <td class="text-nowrap">
+                        {{#installable}}
+                            <a href="{{installurl}}" class="btn btn-primary btn-sm">
+                                {{#str}}presetinstall, tool_aitest{{/str}}
+                            </a>
+                        {{/installable}}
+                        {{^installable}}
+                            <span class="text-muted">{{reason}}</span>
+                        {{/installable}}
+                    </td>
+                </tr>
+                {{/presets}}
+            </tbody>
+        </table>
+    </div>
+    {{/hasrows}}
+
+    <p>
+        <a href="{{providersurl}}">{{#str}}aiproviders, tool_aitest{{/str}}</a>
+        &middot;
+        <a href="{{testurl}}">{{#str}}fulltestpage, tool_aitest{{/str}}</a>
+    </p>
+</div>

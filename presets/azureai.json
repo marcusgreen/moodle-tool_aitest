@@ -1,0 +1,41 @@
+{
+    "formatversion": 1,
+    "presets": [
+        {
+            "id": "azureaigpt4o",
+            "name": "Azure AI",
+            "description": "Azure OpenAI Service. The endpoint and deployment name are specific to your Azure resource.",
+            "docsurl": "https://learn.microsoft.com/en-us/azure/ai-services/openai/reference",
+            "provider": "aiprovider_azureai",
+            "enabled": true,
+            "config": {
+                "apikey": null,
+                "endpoint": null
+            },
+            "fields": {
+                "apikey": {
+                    "placeholder": "your Azure OpenAI key",
+                    "help": "Keys and Endpoint in the Azure portal, under your OpenAI resource."
+                },
+                "endpoint": {
+                    "placeholder": "https://my-resource.openai.azure.com/",
+                    "help": "The resource endpoint, not the full request URL."
+                },
+                "deployment": {
+                    "placeholder": "my-gpt4o-deployment",
+                    "help": "The name you gave the model deployment in Azure AI Studio, which is not the model name."
+                }
+            },
+            "actions": {
+                "core_ai\\aiactions\\generate_text": {
+                    "enabled": true,
+                    "settings": {
+                        "deployment": null,
+                        "apiversion": "2024-06-01",
+                        "systeminstruction": "You are a helpful assistant embedded in a Moodle site. Answer concisely."
+                    }
+                }
+            }
+        }
+    ]
+}

@@ -1,0 +1,35 @@
+{
+    "formatversion": 1,
+    "presets": [
+        {
+            "id": "deepseekchat",
+            "name": "DeepSeek",
+            "description": "DeepSeek's hosted API. Text only: it supports no image generation.",
+            "docsurl": "https://api-docs.deepseek.com/",
+            "provider": "aiprovider_deepseek",
+            "enabled": true,
+            "requires": {
+                "moodlebranch": "501"
+            },
+            "config": {
+                "apikey": null
+            },
+            "fields": {
+                "apikey": {
+                    "placeholder": "sk-...",
+                    "help": "Create one in the DeepSeek open platform console."
+                }
+            },
+            "actions": {
+                "core_ai\\aiactions\\generate_text": {
+                    "enabled": true,
+                    "settings": {
+                        "model": "deepseek-chat",
+                        "endpoint": "https://api.deepseek.com/chat/completions",
+                        "systeminstruction": "You are a helpful assistant embedded in a Moodle site. Answer concisely."
+                    }
+                }
+            }
+        }
+    ]
+}

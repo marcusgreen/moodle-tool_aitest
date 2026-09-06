@@ -29,4 +29,8 @@ $callbacks = [
         'hook' => \core\hook\output\before_footer_html_generation::class,
         'callback' => \tool_aitest\hook_callbacks::class . '::add_provider_test_link',
     ],
+    [
+        'hook' => \core\hook\output\before_standard_top_of_body_html_generation::class,
+        'callback' => \tool_aitest\hook_callbacks::class . '::show_test_result',
+    ],
 ];

@@ -1,8 +1,11 @@
 <div class="container">
     <h2>{{#str}}coreaiheading,tool_aitest{{/str}}</h2>
     <a href="index.php" class="btn btn-secondary mb-3">{{#str}}backtochoice,tool_aitest{{/str}}</a>
+    {{#returnurl}}
+        <a href="{{returnurl}}" class="btn btn-secondary mb-3">{{#str}}backtoprovidersettings,tool_aitest{{/str}}</a>
+    {{/returnurl}}
     <br/><br/>
-    <a href="coreai.php?action=test" class="btn btn-primary mb-3">{{#str}}sendtestprompt,tool_aitest{{/str}}</a>
+    <a href="{{testurl}}" class="btn btn-primary mb-3">{{#str}}sendtestprompt,tool_aitest{{/str}}</a>
     <a href="{{wwwroot}}/admin/settings.php?section=aiprovider" class="btn btn-secondary mb-3">{{#str}}aiproviders,tool_aitest{{/str}}</a>
     <a href="diagnose.php" class="btn btn-info mb-3">{{#str}}diagnostics,tool_aitest{{/str}}</a>
     <br/><br/>

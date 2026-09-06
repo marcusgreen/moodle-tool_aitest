@@ -1,0 +1,35 @@
+{
+    "formatversion": 1,
+    "presets": [
+        {
+            "id": "geminiflash",
+            "name": "Google Gemini",
+            "description": "Google's Gemini API. The model name forms part of the endpoint URL, so change both together.",
+            "docsurl": "https://ai.google.dev/gemini-api/docs",
+            "provider": "aiprovider_gemini",
+            "enabled": true,
+            "requires": {
+                "moodlebranch": "502"
+            },
+            "config": {
+                "apikey": null
+            },
+            "fields": {
+                "apikey": {
+                    "placeholder": "AIza...",
+                    "help": "Create one in Google AI Studio."
+                }
+            },
+            "actions": {
+                "core_ai\\aiactions\\generate_text": {
+                    "enabled": true,
+                    "settings": {
+                        "model": "gemini-2.5-flash",
+                        "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+                        "systeminstruction": "You are a helpful assistant embedded in a Moodle site. Answer concisely."
+                    }
+                }
+            }
+        }
+    ]
+}

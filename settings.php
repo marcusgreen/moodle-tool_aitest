@@ -35,8 +35,16 @@ if ($hassiteconfig) {
     new \lang_string('testaiconfiguration', 'tool_aitest', $link)));
     $ADMIN->add('ai', $settings);
 
+    $presetsurl = new \moodle_url('../admin/tool/aitest/presets.php');
+    $presetslink = \html_writer::link($presetsurl, get_string('presets', 'tool_aitest'));
+    $settings->add(new admin_setting_heading('aitestpresets', '',
+        new \lang_string('presetlink', 'tool_aitest', $presetslink)));
+
     // Add link to tools section.
     $ADMIN->add('tools', new admin_externalpage('toolaitest', get_string('pluginname', 'tool_aitest'),
         new moodle_url('/admin/tool/aitest/index.php'), 'moodle/site:config'));
+
+    $ADMIN->add('tools', new admin_externalpage('toolaitestpresets', get_string('presets', 'tool_aitest'),
+        new moodle_url('/admin/tool/aitest/presets.php'), 'moodle/site:config'));
 
 }

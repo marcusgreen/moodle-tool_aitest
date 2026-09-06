@@ -1,0 +1,35 @@
+{
+    "formatversion": 1,
+    "presets": [
+        {
+            "id": "ollamalocal",
+            "name": "Ollama (local)",
+            "description": "A local Ollama server. Moodle's cURL security usually blocks localhost, so check HTTP security if the test fails.",
+            "docsurl": "https://github.com/ollama/ollama/blob/main/docs/api.md",
+            "provider": "aiprovider_ollama",
+            "enabled": true,
+            "requires": {
+                "moodlebranch": "500"
+            },
+            "config": {
+                "endpoint": "http://localhost:11434",
+                "enablebasicauth": "0"
+            },
+            "fields": {
+                "endpoint": {
+                    "placeholder": "http://localhost:11434",
+                    "help": "The Ollama server root, without a path."
+                }
+            },
+            "actions": {
+                "core_ai\\aiactions\\generate_text": {
+                    "enabled": true,
+                    "settings": {
+                        "model": "llama3.3",
+                        "systeminstruction": "You are a helpful assistant embedded in a Moodle site. Answer concisely."
+                    }
+                }
+            }
+        }
+    ]
+}
